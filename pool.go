@@ -2,11 +2,14 @@ package wsrest
 
 import (
 	"sync"
+	"net/http"
 )
 
 var pool = sync.Pool{
 	New: func() interface{} {
-		return new(Response)
+		return &Response{
+			Headers: http.Header{},
+		}
 	},
 }
 
