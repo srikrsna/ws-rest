@@ -116,6 +116,10 @@ func (o *options) process(ctx context.Context, req <-chan *http.Request) <-chan 
 
 					o.Handler.ServeHTTP(w, r)
 
+					if w.StatusCode == 0 {
+						w.StatusCode = 200
+					}
+
 					res <- w
 				}()
 			}
@@ -205,6 +209,7 @@ func (w *Response) Read(p []byte) (n int, err error) {
 }
 
 func (w *Response) reset() {
+	w.StatusCode = 0
 	w.request = nil
 	w.buf.Reset()
 	for k := range w.Headers {
