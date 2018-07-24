@@ -96,6 +96,8 @@ func easyjson65fe5901DecodeGithubComSrikrsnaWsRest1(in *jlexer.Lexer, out *WSRes
 			continue
 		}
 		switch key {
+		case "id":
+			out.ID = string(in.String())
 		case "statusCode":
 			out.StatusCode = int(in.Int())
 		case "requestUri":
@@ -159,6 +161,16 @@ func easyjson65fe5901EncodeGithubComSrikrsnaWsRest1(out *jwriter.Writer, in WSRe
 	out.RawByte('{')
 	first := true
 	_ = first
+	{
+		const prefix string = ",\"id\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.ID))
+	}
 	{
 		const prefix string = ",\"statusCode\":"
 		if first {
@@ -271,6 +283,8 @@ func easyjson65fe5901DecodeGithubComSrikrsnaWsRest2(in *jlexer.Lexer, out *WSReq
 			continue
 		}
 		switch key {
+		case "id":
+			out.ID = string(in.String())
 		case "method":
 			out.Method = string(in.String())
 		case "requestUri":
@@ -334,6 +348,16 @@ func easyjson65fe5901EncodeGithubComSrikrsnaWsRest2(out *jwriter.Writer, in WSRe
 	out.RawByte('{')
 	first := true
 	_ = first
+	{
+		const prefix string = ",\"id\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.ID))
+	}
 	{
 		const prefix string = ",\"method\":"
 		if first {
