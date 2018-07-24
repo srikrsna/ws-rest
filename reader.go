@@ -9,11 +9,15 @@ import (
 	"io/ioutil"
 	"bytes"
 	"github.com/mailru/easyjson"
+	"context"
 )
 
 //go:generate easyjson -all -lower_camel_case $GOFILE
 
+var ridKey = struct{}{}
+
 type WSRequest struct {
+	ID         string `json:"id"`
 	Method     string `json:"method"`
 	RequestURI string `json:"requestUri"`
 
@@ -22,6 +26,7 @@ type WSRequest struct {
 }
 
 type WSResponse struct {
+	ID         string `json:"id"`
 	StatusCode int    `json:"statusCode"`
 	RequestURI string `json:"requestUri,omitempty"`
 
@@ -82,12 +87,15 @@ func (*readWriter) Read(rdr io.Reader, r *http.Request) (*http.Request, error) {
 	req.Header = wsReq.Header
 	req.URL = u
 
+	req = req.WithContext(context.WithValue(r.Context(), ridKey, wsReq.ID))
+
 	return req, nil
 }
 
 func (*readWriter) Write(wrt io.Writer, r *http.Request, res *Response) error {
 	wsRes := wsResPool.Get().(*WSResponse)
 
+	wsRes.ID = res.request.Context().Value(ridKey).(string)
 	wsRes.Body = res.Body()
 	wsRes.RequestURI = r.RequestURI
 	wsRes.Headers = res.Headers
