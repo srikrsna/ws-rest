@@ -152,7 +152,7 @@ func (o *options) read(ctx context.Context, conn *websocket.Conn, r *http.Reques
 					return
 				}
 
-				readCh <- req.WithContext(ctx)
+				readCh <- req
 			}
 
 		}
