@@ -142,6 +142,9 @@ func (o *options) read(ctx context.Context, conn *websocket.Conn, r *http.Reques
 			default:
 				_, rdr, err := conn.NextReader()
 				if err != nil {
+					if err, ok := err.(*websocket.CloseError); ok && err.Code == websocket.CloseGoingAway {
+						return
+					}
 					o.ErrorLog.Printf("error obtaining next reader: %v\n", err)
 					return
 				}
